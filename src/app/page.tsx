@@ -1,12 +1,16 @@
-import { Button } from "antd";
-import Image from "next/image";
+// src/app/page.tsx
+"use client";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function Home() {
-  return (
-    <div>Hello world
-      <div>
-        <Button type="primary">New</Button>
-      </div>
-    </div>
-  );
-}
+const Home: React.FC = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/login');
+  }, [router]);
+
+  return null;
+};
+
+export default Home;
