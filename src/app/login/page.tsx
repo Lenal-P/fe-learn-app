@@ -25,8 +25,10 @@ const LoginPage: React.FC = () => {
     try {
       const response = await axiosInstance.post("/auth/login", values);
       message.success("Đăng nhập thành công!");
+      // Lưu thông tin người dùng nếu có (có thể lấy từ response)
+      localStorage.setItem("token", JSON.stringify(response.data.access_token));
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       setLoading(false);
-      localStorage.setItem("token", response.data.access_token);
       router.push("/home");
     } catch (error) {
       message.error("Email hoặc mật khẩu không đúng.");
@@ -72,6 +74,10 @@ const LoginPage: React.FC = () => {
     } catch (error) {
       message.error("Không thể đặt lại mật khẩu. Vui lòng thử lại.");
     }
+  };
+
+  const handleGoogleLogin = async () => {
+    window.location.href = "http://localhost:8080/api/v1/auth/google";
   };
 
   return (
@@ -160,9 +166,7 @@ const LoginPage: React.FC = () => {
         >
           <Button
             style={{ height: "40px", width: "50px", marginRight: 10 }}
-            onClick={() => {
-              window.location.href = "http://localhost:8080/api/v1/auth/google";
-            }}
+            onClick={handleGoogleLogin}
           >
             <FontAwesomeIcon icon={faGoogle} />
           </Button>
@@ -181,7 +185,7 @@ const LoginPage: React.FC = () => {
       {/* Modal quên mật khẩu */}
       <Modal
         title="Quên mật khẩu"
-        visible={forgotPasswordModal}
+        open={forgotPasswordModal}
         onOk={handleForgotPassword}
         onCancel={() => setForgotPasswordModal(false)}
         okText="Xác nhận"
@@ -204,7 +208,7 @@ const LoginPage: React.FC = () => {
       {/* Modal nhập OTP */}
       <Modal
         title="Nhập OTP"
-        visible={otpModal}
+        open={otpModal} // Cập nhật ở đây
         onOk={handleVerifyOtp}
         onCancel={() => setOtpModal(false)}
         okText="Xác nhận"
@@ -227,7 +231,7 @@ const LoginPage: React.FC = () => {
       {/* Modal nhập mật khẩu mới */}
       <Modal
         title="Đặt lại mật khẩu"
-        visible={resetPasswordModal}
+        open={resetPasswordModal} // Cập nhật ở đây
         onOk={handleResetPassword}
         onCancel={() => setResetPasswordModal(false)}
         okText="Xác nhận"

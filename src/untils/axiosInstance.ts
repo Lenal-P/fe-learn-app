@@ -12,11 +12,11 @@ const axiosInstance = axios.create({
 // Có thể thêm interceptor nếu cần
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Thêm token vào header nếu có
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    console.log("Interceptor config:", config);  // Log config để xem header Authorization
     return config;
   },
   (error) => {
